@@ -4,132 +4,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIH 2026 — Pick Your Problem Statement</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --bg: #0f1115; --panel: #171a21; --panel2: #1e222b; --border: #2b303c;
-    --text: #e8eaf0; --muted: #9aa3b2; --accent: #4f8cff; --accent2: #35c98f;
-    --hw: #ff9f43; --sw: #4f8cff; --star: #ffd25a;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.5;
-  }
-  header {
-    position: sticky; top: 0; z-index: 10; background: rgba(15,17,21,0.97);
-    backdrop-filter: blur(6px); border-bottom: 1px solid var(--border);
-    padding: 14px 20px 16px;
-  }
-  .brand { font-size: 0.72rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 2px; }
-  header h1 { margin: 0 0 4px; font-size: 1.35rem; }
-  .nav { display: flex; gap: 8px; margin-bottom: 10px; }
-  .nav a {
-    text-decoration: none; background: var(--panel2); color: var(--muted); border: 1px solid var(--border);
-    border-radius: 999px; padding: 7px 14px; font-size: 0.83rem; font-weight: 600;
-  }
-  .nav a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .countdown {
-    display: inline-block; background: rgba(255,159,67,0.12); color: var(--hw);
-    border-radius: 8px; padding: 5px 10px; font-size: 0.82rem; font-weight: 600; margin: 4px 0 10px;
-  }
-  .stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; font-size: 0.85rem; color: var(--muted); }
-  .stats b { color: var(--text); }
-  .tabs { display: flex; gap: 8px; margin-bottom: 10px; }
-  .tab-btn {
-    background: var(--panel2); color: var(--muted); border: 1px solid var(--border);
-    border-radius: 999px; padding: 7px 14px; font-size: 0.83rem; cursor: pointer; font-weight: 600;
-  }
-  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .controls { display: flex; gap: 10px; flex-wrap: wrap; }
-  .controls input, .controls select {
-    background: var(--panel2); color: var(--text); border: 1px solid var(--border);
-    border-radius: 8px; padding: 9px 12px; font-size: 0.9rem;
-  }
-  .controls input[type=text] { flex: 1; min-width: 180px; }
-  #count { font-size: 0.85rem; color: var(--accent2); align-self: center; white-space: nowrap; }
-  #activeBucket {
-    display: none; align-items: center; gap: 8px; background: rgba(79,140,255,0.12); color: var(--accent);
-    border-radius: 8px; padding: 6px 12px; font-size: 0.83rem; margin-top: 10px; font-weight: 600;
-  }
-  #activeBucket button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.9rem; }
-  main { max-width: 1100px; margin: 0 auto; padding: 20px; }
-  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-  @media (min-width: 780px) { .grid { grid-template-columns: 1fr 1fr; } }
-  .card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px; display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 260px;
-  }
-  .card.starred { border-color: var(--star); box-shadow: 0 0 0 1px rgba(255,210,90,0.25); }
-  .card.flash { animation: flash 1.6s ease; }
-  @keyframes flash { 0%,100% { background: var(--panel); } 30% { background: rgba(79,140,255,0.18); } }
-  .card-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .ps-number { font-family: monospace; font-size: 0.8rem; color: var(--muted); }
-  .badge { font-size: 0.72rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; }
-  .cat-software { background: rgba(79,140,255,0.15); color: var(--sw); }
-  .cat-hardware { background: rgba(255,159,67,0.15); color: var(--hw); }
-  .comp-badge { }
-  .comp-starter { background: rgba(53,201,143,0.15); color: var(--accent2); }
-  .comp-moderate { background: rgba(255,210,90,0.15); color: var(--star); }
-  .comp-advanced { background: rgba(255,92,122,0.15); color: #ff5c7a; }
-  .star-btn {
-    margin-left: auto; background: none; border: none; font-size: 1.3rem; cursor: pointer;
-    color: var(--muted); line-height: 1; padding: 0 2px;
-  }
-  .star-btn.on { color: var(--star); }
-  .title { margin: 2px 0 2px; font-size: 1.05rem; line-height: 1.35; }
-  .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 2px; }
-  .tag-badge {
-    font-size: 0.68rem; padding: 2px 7px; border-radius: 6px; background: var(--panel2);
-    color: var(--muted); border: 1px solid var(--border);
-  }
-  .meta { font-size: 0.83rem; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
-  .meta strong { color: #c3c9d6; }
-  .toggle-desc {
-    background: var(--panel2); color: var(--accent); border: 1px solid var(--border);
-    border-radius: 6px; padding: 6px 10px; font-size: 0.8rem; cursor: pointer; align-self: flex-start;
-  }
-  .toggle-desc:hover { background: #242936; }
-  .desc {
-    display: none; font-size: 0.87rem; color: #c9cedb; background: var(--panel2);
-    border-radius: 8px; padding: 12px; margin-top: 6px; max-height: 340px; overflow-y: auto;
-  }
-  .desc.open { display: block; }
-  .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
-  .links { font-size: 0.8rem; color: var(--muted); }
-  .links a { color: var(--accent); text-decoration: none; }
-  .links a:hover { text-decoration: underline; }
-  .copy-link {
-    background: none; border: 1px solid var(--border); color: var(--muted);
-    border-radius: 6px; padding: 5px 9px; font-size: 0.76rem; cursor: pointer; white-space: nowrap;
-  }
-  .copy-link:hover { color: var(--accent); border-color: var(--accent); }
-  .hidden { display: none !important; }
-  .empty-msg { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 0.95rem; }
-  footer { text-align: center; color: var(--muted); font-size: 0.78rem; padding: 24px; }
-  .toast {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-    background: var(--accent2); color: #06231a; font-weight: 700; font-size: 0.85rem;
-    padding: 10px 18px; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
-    z-index: 50;
-  }
-  .toast.show { opacity: 1; }
+
+:root {
+  --bg: #f6f7fb; --panel: #ffffff; --panel2: #f1f3f9; --border: #e6e9f2;
+  --text: #14161f; --muted: #6b7280; --muted2: #9aa1b0;
+  --indigo: #4f46e5; --indigo-soft: #eef0ff;
+  --emerald: #10b981; --emerald-soft: #e6f9f2;
+  --amber: #f59e0b; --amber-soft: #fff4e0;
+  --rose: #f43f5e; --rose-soft: #ffe9ee;
+  --sw: var(--indigo); --hw: var(--amber); --star: #f0b429;
+  --shadow-sm: 0 1px 2px rgba(20,22,31,0.04), 0 1px 3px rgba(20,22,31,0.06);
+  --shadow-md: 0 4px 10px rgba(20,22,31,0.04), 0 12px 28px rgba(20,22,31,0.07);
+  --shadow-lg: 0 10px 24px rgba(20,22,31,0.08), 0 2px 6px rgba(20,22,31,0.05);
+  --radius: 16px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: 'Lexend', 'Inter', sans-serif; letter-spacing: -0.01em; }
+
+.hero {
+  background: radial-gradient(120% 160% at 15% 0%, #6d5bff 0%, #4f46e5 42%, #3730a3 100%);
+  color: #fff; padding: 28px 20px 22px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 90% at 90% -10%, rgba(255,255,255,0.18), transparent 60%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.brand {
+  font-size: 0.72rem; color: rgba(255,255,255,0.85); text-transform: uppercase;
+  letter-spacing: 0.14em; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+}
+.brand::before { content: "◆"; font-size: 0.6rem; }
+.hero h1 { margin: 0 0 6px; font-size: 1.85rem; font-weight: 800; }
+.hero .tagline { color: rgba(255,255,255,0.82); font-size: 0.95rem; margin-bottom: 16px; max-width: 640px; }
+
+.nav { display: flex; gap: 8px; margin-bottom: 16px; }
+.nav a {
+  text-decoration: none; background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px; padding: 8px 16px; font-size: 0.83rem; font-weight: 600; backdrop-filter: blur(6px);
+  transition: background 0.15s;
+}
+.nav a:hover { background: rgba(255,255,255,0.22); }
+.nav a.active { background: #fff; color: var(--indigo); border-color: #fff; }
+
+.pill-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.pill {
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); backdrop-filter: blur(6px);
+  border-radius: 12px; padding: 8px 14px; font-size: 0.8rem; color: rgba(255,255,255,0.9);
+}
+.pill b { font-size: 1.05rem; color: #fff; display: block; font-family: 'Lexend', sans-serif; }
+
+.countdown {
+  display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.16); color: #fff;
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 10px; padding: 7px 12px; font-size: 0.82rem;
+  font-weight: 600; margin-bottom: 14px; backdrop-filter: blur(6px);
+}
+.countdown::before { content: "⏱"; }
+
+.controls-wrap {
+  background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-md);
+  padding: 14px 16px; margin-top: -34px; position: relative; z-index: 2; max-width: 1100px; margin-left: auto; margin-right: auto;
+}
+.tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+.tab-btn {
+  background: var(--panel2); color: var(--muted); border: 1px solid var(--border);
+  border-radius: 999px; padding: 8px 16px; font-size: 0.83rem; cursor: pointer; font-weight: 600;
+  transition: all 0.15s;
+}
+.tab-btn.active { background: var(--indigo); color: #fff; border-color: var(--indigo); box-shadow: 0 4px 10px rgba(79,70,229,0.25); }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; }
+.controls input, .controls select {
+  background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 13px; font-size: 0.88rem; font-family: inherit;
+}
+.controls input:focus, .controls select:focus { outline: 2px solid var(--indigo); outline-offset: 1px; }
+.controls input[type=text] { flex: 1; min-width: 200px; }
+#count { font-size: 0.85rem; color: var(--emerald); align-self: center; white-space: nowrap; font-weight: 600; }
+#activeBucket {
+  display: none; align-items: center; gap: 8px; background: var(--indigo-soft); color: var(--indigo);
+  border-radius: 10px; padding: 8px 14px; font-size: 0.83rem; margin-top: 12px; font-weight: 600;
+}
+#activeBucket button { background: none; border: none; color: var(--indigo); cursor: pointer; font-size: 0.9rem; font-weight: 700; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 26px 20px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 780px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+.card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px; display: flex; flex-direction: column; gap: 9px; scroll-margin-top: 280px;
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; position: relative;
+}
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.card::before {
+  content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 4px;
+  background: var(--indigo);
+}
+.card[data-category="Hardware"]::before { background: var(--amber); }
+.card.starred { border-color: var(--star); box-shadow: 0 0 0 2px rgba(240,180,41,0.25), var(--shadow-sm); }
+.card.flash { animation: flash 1.6s ease; }
+@keyframes flash { 0%,100% { background: var(--panel); } 30% { background: var(--indigo-soft); } }
+
+.card-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-left: 8px; }
+.ps-number { font-family: 'SF Mono', Menlo, monospace; font-size: 0.78rem; color: var(--muted2); font-weight: 600; }
+.badge { font-size: 0.71rem; padding: 4px 10px; border-radius: 999px; font-weight: 700; }
+.cat-software { background: var(--indigo-soft); color: var(--indigo); }
+.cat-hardware { background: var(--amber-soft); color: #b45309; }
+.comp-starter { background: var(--emerald-soft); color: #047857; }
+.comp-moderate { background: var(--amber-soft); color: #b45309; }
+.comp-advanced { background: var(--rose-soft); color: #be123c; }
+.star-btn {
+  margin-left: auto; background: none; border: none; font-size: 1.4rem; cursor: pointer;
+  color: var(--muted2); line-height: 1; padding: 0 2px; transition: transform 0.15s;
+}
+.star-btn:hover { transform: scale(1.15); }
+.star-btn.on { color: var(--star); }
+.title { margin: 2px 0 2px; padding-left: 8px; font-size: 1.08rem; line-height: 1.35; font-weight: 700; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 2px; padding-left: 8px; }
+.tag-badge {
+  font-size: 0.7rem; padding: 3px 9px; border-radius: 7px; background: var(--panel2);
+  color: var(--muted); border: 1px solid var(--border); font-weight: 500;
+}
+.meta { font-size: 0.84rem; color: var(--muted); display: flex; flex-direction: column; gap: 3px; padding-left: 8px; }
+.meta strong { color: var(--text); font-weight: 600; }
+.desc-wrap { padding-left: 8px; }
+.toggle-desc {
+  background: var(--panel2); color: var(--indigo); border: 1px solid var(--border); font-family: inherit;
+  border-radius: 8px; padding: 7px 12px; font-size: 0.8rem; cursor: pointer; align-self: flex-start; font-weight: 600;
+  transition: background 0.15s;
+}
+.toggle-desc:hover { background: var(--indigo-soft); }
+.desc {
+  display: none; font-size: 0.87rem; color: #3a3f4c; background: var(--panel2);
+  border-radius: 10px; padding: 13px; margin-top: 8px; max-height: 340px; overflow-y: auto; line-height: 1.6;
+}
+.desc.open { display: block; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; padding-left: 8px; }
+.links { font-size: 0.8rem; color: var(--muted); }
+.links a { color: var(--indigo); text-decoration: none; font-weight: 600; }
+.links a:hover { text-decoration: underline; }
+.copy-link {
+  background: none; border: 1px solid var(--border); color: var(--muted); font-family: inherit;
+  border-radius: 8px; padding: 6px 10px; font-size: 0.76rem; cursor: pointer; white-space: nowrap; font-weight: 600;
+  transition: all 0.15s;
+}
+.copy-link:hover { color: var(--indigo); border-color: var(--indigo); background: var(--indigo-soft); }
+.hidden { display: none !important; }
+.empty-msg { text-align: center; color: var(--muted); padding: 50px 20px; font-size: 0.95rem; }
+footer { text-align: center; color: var(--muted2); font-size: 0.78rem; padding: 30px 20px; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--text); color: #fff; font-weight: 600; font-size: 0.85rem;
+  padding: 11px 20px; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  z-index: 50; box-shadow: var(--shadow-lg);
+}
+.toast.show { opacity: 1; }
+
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">KCT &middot; Smart India Hackathon 2026</div>
-  <h1>Pick Your Problem Statement</h1>
-  <div class="nav">
-    <a href="decide.html" class="active">Browse Problem Statements</a>
-    <a href="analytics.html">Planning Analytics</a>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand">KCT &middot; Smart India Hackathon 2026</div>
+    <h1>Pick Your Problem Statement</h1>
+    <div class="tagline">Search, filter, and shortlist across all 226 official SIH 2026 problem statements — built for actually deciding what to work on, not just browsing.</div>
+    <div class="nav">
+      <a href="decide.html" class="active">Browse Problem Statements</a>
+      <a href="analytics.html">Planning Analytics</a>
+    </div>
+    <div class="countdown" id="countdown">Idea submission deadline: 20 September 2026</div>
+    <div class="pill-row">
+      <div class="pill"><b>226</b>Total statements</div>
+      <div class="pill"><b>172</b>Software</div>
+      <div class="pill"><b>54</b>Hardware</div>
+      <div class="pill" id="shortlistPill"><b id="shortlistCount">0</b>Shortlisted</div>
+    </div>
   </div>
-  <div class="countdown" id="countdown">Idea submission deadline: 20 September 2026</div>
-  <div class="stats">
-    <span><b>226</b> total</span>
-    <span><b>172</b> Software</span>
-    <span><b>54</b> Hardware</span>
-    <span id="shortlistCount"><b>0</b> shortlisted</span>
-  </div>
+</div>
+<div class="controls-wrap">
   <div class="tabs">
     <button class="tab-btn active" data-tab="all">All Problem Statements</button>
     <button class="tab-btn" data-tab="shortlist">⭐ My Shortlist</button>
@@ -229,7 +292,7 @@
     <span id="count"></span>
   </div>
   <div id="activeBucket"><span id="activeBucketLabel"></span><button id="clearBucket">✕ clear</button></div>
-</header>
+</div>
 <main>
   <div class="grid" id="grid">
     
@@ -237,7 +300,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26001</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26001" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based early warning and landslide Risk Monitoring System in NER</h3>
@@ -261,7 +324,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26002</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26002" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Based Smart Logistics and Accessibility Intelligence Platform for North Eastern Region (NER)</h3>
@@ -285,7 +348,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26003</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26003" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in North Eastern Region (NER)</h3>
@@ -309,7 +372,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26004</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26004" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Assisted Early Detection System for Osteoarthritis (OA) Risk Markers in North Eastern Region (NER)</h3>
@@ -333,7 +396,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26005</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26005" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Solar-Powered Smart Mini Cold Storage System for Fresh Vegetables in North Eastern Region (NER)</h3>
@@ -357,7 +420,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26006</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26006" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of an Intelligent Freight Forecasting Model for Optimized Vessel Chartering and Bulk Cargo Procurement from overseas to East Coast of India</h3>
@@ -381,7 +444,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26007</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26007" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Safe and Efficient Operation of Mine Vehicles in Fog and Low-Visibility Conditions in Open Cast Iron Ore Mines.</h3>
@@ -405,7 +468,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26008</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26008" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Belt Joint Rupture and Conveyor Belt Damages in Iron Ore Mining Industry: Intelligent Monitoring and Prediction of Conveyor Belt Joint Rupture and Damages in Iron Ore Mining Industry.</h3>
@@ -429,7 +492,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26009</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26009" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Using AI/ML and Space Technology to Identify Manganese Reserves and Overcome Production Shortfalls.</h3>
@@ -453,7 +516,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26010</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26010" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Survey/Resurvey of Rural Agricultural Land in lndia</h3>
@@ -477,7 +540,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26011</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26011" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">3D ULPIN Generation and vertical Property Mapping SYstem</h3>
@@ -501,7 +564,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26012</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26012" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Automated Urban Parcel Mapping and Cadastral Feature Extraction System using Drone lmagery</h3>
@@ -525,7 +588,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26013</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26013" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Automated lntegration and lntelligent Harmonization of Multi-source Geospatial Data for urban Land Record Management.</h3>
@@ -549,7 +612,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26014</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26014" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">An lntegrated GIS-based Digital Public lnfrastructure for Land Governance</h3>
@@ -573,7 +636,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26015</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26015" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Application of Geospatial Techniques for visualization and analysis to interpret Geo-Coded lmages to enhance watershed Development Outcomes.</h3>
@@ -597,7 +660,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26016</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26016" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Real-Time National Land Acquisition &amp; Management System for End-to-End Digital Monitoring and Decision Support</h3>
@@ -621,7 +684,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26017</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26017" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Predictive Analytics System for Early Detection of Land Acquisition Delays</h3>
@@ -645,7 +708,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26018</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26018" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Intelligent Land Record Digitization and Validation System</h3>
@@ -669,7 +732,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26019</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26019" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">National Digital Platform for Research, Policy Innovation, and Evidence-Based Land Governance</h3>
@@ -693,7 +756,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26020</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26020" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design and Development of Innovative Hand-Spinning Equipment for Enhancing Khadi Artisan Productivity and Income</h3>
@@ -717,7 +780,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26021</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26021" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Honey Chain: A block chain-based system for honey traceability and smart beekeeping management.</h3>
@@ -741,7 +804,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26022</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26022" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design and develop a smart, solar-powered drying and compact packaging system to support home-based agarbatti manufacturing by rural women artisans.</h3>
@@ -765,7 +828,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26023</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26023" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Geological, Mining and other Reporting Solution for CMPDI/CIL subsidiaries</h3>
@@ -789,7 +852,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26024</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26024" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Smart Governance and Compliance Monitoring System for Coal Mines</h3>
@@ -813,7 +876,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26025</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26025" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of an AI-enabled Low Cost Real Time Mine Subsidence Monitoring, Prediction and Early Warning System for Underground Coal Mines in India</h3>
@@ -837,7 +900,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26026</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26026" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of Mobile (Quadruped)/Handheld Device/System for Real-Time Detection of Narcotics and Explosives across Indian Railways.</h3>
@@ -861,7 +924,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26027</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26027" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Powered Automatic Block Planning to Maximize Asset Availability for Train Operations on Indian Railways</h3>
@@ -885,7 +948,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26028</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26028" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Dynamic Forecast of Expected Time of Arrival (ETA) for Coaching Trains</h3>
@@ -909,7 +972,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26029</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26029" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Automated High-Current Short-Circuit Test System for IEC 60898-1:2015 MCB Compliance.</h3>
@@ -933,7 +996,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26030</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26030" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Automated Cable Specimen Preparation System for IS 10810 and IS 7098 Compliance.</h3>
@@ -957,7 +1020,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26031</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26031" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Quality assessment and grading of onions are often subjective and vary across procurement centers, resulting in disputes and inconsistencies.</h3>
@@ -981,7 +1044,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26032</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26032" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Farmers often face long waiting times, lack of information regarding procurement schedules, and uncertainty about procurement status.</h3>
@@ -1005,7 +1068,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26033</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26033" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Multiple intermediaries reduce farmers earnings and increase consumer prices.</h3>
@@ -1029,7 +1092,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26034</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26034" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Software System to check compliance of Packaged Commodities under Legal Metrology(Packaged Commodities) Rules, 2011 by scanning products, images and labels.</h3>
@@ -1053,7 +1116,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26035</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26035" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Software Program/Application for Generation of Test Reports for Non-Automatic Weighing Instruments (NAWI) as per OIML Recommendation R- 76</h3>
@@ -1077,7 +1140,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26036</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26036" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of an Online Verification System for Weighing and Measuring Instruments</h3>
@@ -1101,7 +1164,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26037</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26037" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Adaptive Path Planning and Collision Avoidance for Autonomous Vehicles on Unstructured Indian Roads</h3>
@@ -1125,7 +1188,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26038</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26038" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Explainable AI for Diabetic Retinopathy Screening in Rural India</h3>
@@ -1149,7 +1212,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26039</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26039" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Powered Underground Mine Safety, Monitoring and Rescue System.</h3>
@@ -1173,7 +1236,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26040</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26040" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Smart Water Purification and Quality Monitoring System for Rural and Mining-Affected Areas.</h3>
@@ -1197,7 +1260,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26041</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26041" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AR-Based Vocational Training Simulator for Industrial Safety in Jharkhand&#x27;s Mining &amp; Manufacturing Sector</h3>
@@ -1221,7 +1284,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26042</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26042" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education</h3>
@@ -1245,7 +1308,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26043</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26043" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">A digital platform to crowdsource societal challenges and facilitate collaborative problem solving through universities and industry partnerships</h3>
@@ -1269,7 +1332,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26044</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26044" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Portal for Academia - Industry collaboration for Skill Mapping, Internships and Placement</h3>
@@ -1293,7 +1356,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26045</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26045" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">IP-SAKTI Sahayak a multilingual, RAG-based (source-cited) AI assistant for Intellectual Property and regulatory guidance in Ayurveda, across national and international regimes.</h3>
@@ -1317,7 +1380,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26046</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26046" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AIIA Clinical Trials Dashboard - a real-time, cloud-based, GCP-compliant Clinical Trial Management System (CTMS) for Ayurveda research, with CDISC/FHIR-interoperable data, role-based KPIs, and integrated ethics, regulatory (CTRI / NDCT Rules 2019) and pharmacovigilance tracking.</h3>
@@ -1341,7 +1404,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26047</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26047" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Patient Case-Taking Software</h3>
@@ -1365,7 +1428,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26048</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26048" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">iKwath - a pod-based smart Kwatha (Kadha) maker that prepares a fresh, AFI/API-standardized decoction from coarse powder (yavaku?a c?r?a) on demand, in the shortest practical time without altering the decoctions quality or yield</h3>
@@ -1389,7 +1452,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26049</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26049" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Modifications to improve the reliability, efficiency,and lifespan of electrical and electronic equipment and systems in the ambient condition of subzero temperature and low pressure of High Altitude Areas(HAA) and Super High Altitude Areas (SHAA) of Ladakh region.</h3>
@@ -1413,7 +1476,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26050</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26050" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">High Altitude Performance Optimization and Robust Design of Anti-Drone System.</h3>
@@ -1437,7 +1500,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26051</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26051" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Software Based Model Development for Design of Area Specific Shelter for Thermal Comfort Maintenance.</h3>
@@ -1461,7 +1524,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26052</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26052" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">To develop an AI/ML-enabled adaptive noise cancellation (ANC) system that effectively suppresses stationary, non-stationary, and impulsive defence noises while maintaining high speech intelligibility and real-time performance on embedded hardware.</h3>
@@ -1485,7 +1548,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26053</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26053" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Adaptive Variable Resolution 2.5D Lidar Mapping for Dynamic Environment Perception</h3>
@@ -1509,7 +1572,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26054</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26054" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Enabled Real-Time Digital Twin System for Health Monitoring, Fault Prediction and Mission Reliability Enhancement of Aero Piston Engines used in MALE UAVs.</h3>
@@ -1533,7 +1596,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26055</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26055" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Smart Scan strategy for Electronic Warfare</h3>
@@ -1557,7 +1620,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26056</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26056" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Real-time Airfare Price Index for India through Automated Web Scraping of Airline and Online Travel Aggregator Portals for Augmentation of the Consumer Price Index (CPI).</h3>
@@ -1581,7 +1644,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26057</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26057" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Automated Underwater Marine Debris and Anomaly Detection System using Side-Scan Sonar Imagery</h3>
@@ -1605,7 +1668,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26058</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26058" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Low-Power, Real-Time Adaptive Software-Defined Sonar Transmitter Payload for Autonomous Underwater Vehicles (AUVs)</h3>
@@ -1629,7 +1692,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26059</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26059" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Enabled Antarctic Sea-Ice, Iceberg Trajectory, and Navigation Decision Support System</h3>
@@ -1653,7 +1716,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26060</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26060" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Digital Platform for efficient remote management of Indian Antarctic Research Stations</h3>
@@ -1677,7 +1740,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26061</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26061" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Smart Energy Management System for Polar Research Stations</h3>
@@ -1701,7 +1764,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26062</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26062" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Integrated Polar Expedition Logistics and Asset Management System</h3>
@@ -1725,7 +1788,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26063</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26063" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Integrated Polar Science Outreach, Knowledge Repository and Media Dissemination Portal</h3>
@@ -1749,7 +1812,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26064</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26064" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Low-Cost Deployable Seafloor Metal Detection Sensor for Ocean Resource Exploration</h3>
@@ -1773,7 +1836,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26065</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26065" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Autonomous Low-Cost Ocean Observation Platform for Polar and Southern Oceans</h3>
@@ -1797,7 +1860,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26066</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26066" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">OceanEmbed - Satellite Embedding-Based Deep Learning Framework for Reconstruction of Subsurface Ocean Temperature from Surface Satellite Observations.</h3>
@@ -1821,7 +1884,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26067</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26067" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Develop a web-based interactive 3D visualization platform that integrates numerical ocean model outputs and in-situ observations.</h3>
@@ -1845,7 +1908,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26068</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26068" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">WeatherGPT: Conversational AI for Weather Forecasting, Alerts, and Climate Information</h3>
@@ -1869,7 +1932,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26069</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26069" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">National Weather Big Data Analytics Platform</h3>
@@ -1893,7 +1956,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26070</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26070" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">To develop an Artificial Intelligence (AI) / Machine Learning (ML) based system for identification, classification, and prediction of different tropical cyclone patterns using multi-source satellite data.</h3>
@@ -1917,7 +1980,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26071</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26071" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI/ML-Based Integrated heavy rainfall Early Warning and Inundation Prediction System using Satellite, Radar, observational Weather and numerical weather prediction model data.</h3>
@@ -1941,7 +2004,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26072</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26072" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AIML based Nowcasting of thunderstorm and lightning using atmospheric observation including multiple radars, satellite, lightning and model data.</h3>
@@ -1965,7 +2028,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26073</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26073" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI/ML-Based Intelligent Anomaly Detection for Automatic Weather Stations (AWS)</h3>
@@ -1989,7 +2052,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26074</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26074" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Downscaling of weather forecast from Block level to Panchayat level: Inferring high-resolution plots/ data/ information from low-resolution plot /data /information /variables for agro-meteorological advisory services.</h3>
@@ -2013,7 +2076,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26075</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26075" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Participants are invited to design and develop **CAPACITY CONNECT A Digital Capacity Building and Learning Management Portal** to support organizational training, competency development, and knowledge sharing through a centralized web-based platform.</h3>
@@ -2037,7 +2100,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26076</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26076" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of personalized homepage for &#x27;Mausam&#x27; mobile application:</h3>
@@ -2061,7 +2124,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26077</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26077" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Hyper-Local Early Warning System for Severe Weather Nowcasting</h3>
@@ -2085,7 +2148,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26078</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26078" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Spatio-Temporal Tracking of Extreme Weather Anomalies in Medium-Range Forecasts</h3>
@@ -2109,7 +2172,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26079</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26079" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts</h3>
@@ -2133,7 +2196,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26080</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26080" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Regime-Aware AI Post-Processing of Monsoon Rainfall Forecasts</h3>
@@ -2157,7 +2220,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26081</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26081" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Hybrid AINWP Multi-Model Forecast Blending System</h3>
@@ -2181,7 +2244,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26082</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26082" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Air PollutionWeather Coupled Forecasting System (Delhi NCR Focus)</h3>
@@ -2205,7 +2268,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26083</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26083" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Extreme Heatwave Early Warning and Human Thermal Stress Index</h3>
@@ -2229,7 +2292,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26084</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26084" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Convective scale nowcasting for Thunderstorms, Hail &amp; Cloudbursts (06 hr)</h3>
@@ -2253,7 +2316,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26085</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26085" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Urban Flood Nowcasting System (Drainage and Rainfall Coupling)</h3>
@@ -2277,7 +2340,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26086</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26086" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Hyperlocal Monsoon Onset &amp; Break Prediction System (Block/Village Scale)</h3>
@@ -2301,7 +2364,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26087</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26087" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Enabled Cooperative Capacity Building, ERP &amp; Employment Ecosystem</h3>
@@ -2325,7 +2388,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26088</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26088" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Multilingual Cooperative Governance &amp; Legal Assistance Chatbot</h3>
@@ -2349,7 +2412,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26089</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26089" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Cooperative Gig Services Platform for Household &amp; Community Services</h3>
@@ -2373,7 +2436,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26090</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26090" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Market Linkage and Smart Cataloging Mobile Application for Marginalized Artisans</h3>
@@ -2397,7 +2460,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26091</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26091" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Hyper-Local Business Advisory and Financial Structuring Assistant for Rural Micro-Entrepreneurs</h3>
@@ -2421,7 +2484,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26092</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26092" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Scheme Matching for Marginalized Entrepreneurs</h3>
@@ -2445,7 +2508,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26093</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26093" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Real-Time Stress and Trauma Assessment Module for Victims/Complainants Accessing NHAA (14566) and Integrated Portal</h3>
@@ -2469,7 +2532,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26094</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26094" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Dynamic Mental Health Monitoring and Distress Prediction System for Victims of Atrocities</h3>
@@ -2493,7 +2556,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26095</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26095" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Smart Real-Time Monitoring &amp; Inspection Mobile App</h3>
@@ -2517,7 +2580,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26096</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26096" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Digital Heritage Archive for Memorials, Manuscripts &amp; Ambedkar: AI-Powered Institutional Archive and Audio-Visual Knowledge Platform</h3>
@@ -2541,7 +2604,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26097</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26097" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven voice Assistant for livelihood Mapping and NSQF-Aligned Skilling Recommendations for SC Communities under GIA component of PM-AJAY</h3>
@@ -2565,7 +2628,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26098</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26098" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Low-Cost Precision Guidance and Smart Electronic Fuze System for a 155 mm Artillery Shell</h3>
@@ -2589,7 +2652,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26099</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26099" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Standardization and Harmonization of Material Codes Across CPSEs</h3>
@@ -2613,7 +2676,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26100</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26100" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Integrated Bid Compliance Verification Platform for GeM Procurement</h3>
@@ -2637,7 +2700,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26101</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26101" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Develop an AI enabled learning platform that identifies competency gaps, recommends personalized training through integration with the iGOT Karmayogi ecosystem, and capable of generating Quizzes and Multiple choice questions (MCQs) from uploaded learning materials to strengthen capacity building in India&#x27;s Official Statistical System.</h3>
@@ -2661,7 +2724,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26102</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26102" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of an AI-powered system to detect anomalies, fraud, and inefficiencies in MPLAD Scheme implementation regd.</h3>
@@ -2685,7 +2748,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26103</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26103" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Use case on web-based integrated project-monitoring platform</h3>
@@ -2709,7 +2772,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26104</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26104" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks</h3>
@@ -2733,7 +2796,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26105</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26105" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Continuous Cyber Risk Quantification and Investment Optimization Platform</h3>
@@ -2757,7 +2820,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26106</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26106" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Email Threat Detection, GeoLocation and Forensic Intelligence Platform</h3>
@@ -2781,7 +2844,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26107</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26107" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-powered Intelligent Assistant for Indian Standards and BIS Services for Industries and Consumers</h3>
@@ -2805,7 +2868,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26108</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26108" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Recommendation Engine for Identifying Applicable Indian Standards for Procurement Specifications</h3>
@@ -2829,7 +2892,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26109</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26109" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Based Predictive Modelling for Early Forecasting of Bovine Mastitis in lndian Dairy Farms</h3>
@@ -2853,7 +2916,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26110</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26110" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Low-Cost Light-weight Milk Chilling Can for Small-Scale Dairy Farmers</h3>
@@ -2877,7 +2940,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26111</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26111" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Smart Al-Enabled Rapid Feed and Silage Quality Testing System for Dairy Farmers</h3>
@@ -2901,7 +2964,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26112</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26112" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design and Develop a Modular Autonomous Mobile Robot (AMR) Platform for Smart Warehouse Automation</h3>
@@ -2925,7 +2988,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26113</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26113" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Human augmentation technologies are transforming healthcare,rehabilitation, industrial ergonomics, assistive living, sports, and personal mobility by improving human capabilities and enhancing quality of life.</h3>
@@ -2949,7 +3012,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26114</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26114" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Smart City Site Planning using Autodesk Forma Site Design</h3>
@@ -2973,7 +3036,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26115</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26115" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design and Develop a Smart Mobile Medical-Waste Collection and Segregation System</h3>
@@ -2997,7 +3060,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26116</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26116" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Urban Mixed-Use Design Challenge-Design a centrally located mixed-use building in Autodesk Revit with commercial spaces (Ground + 1st floor) and residential units (up to 8 floors). 1 Level of Basement (Car Parking + EV Charging), Total (B+G+9)(Note: Plot size and all required dimensions may be assumed by students (in mm units).</h3>
@@ -3021,7 +3084,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26117</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26117" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Sovereign On-Premise Agentic AI Workbench using Open-Weight Multimodal LLMs for Confidential Industrial Work</h3>
@@ -3045,7 +3108,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26118</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26118" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Passive Colorimetric H2S Exposure-Dosimeter Wristband with AI-Based Quantitative Reading</h3>
@@ -3069,7 +3132,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26119</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26119" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Indigenous GPU-Accelerated Optimization Solver (Sovereign Alternative to Express / CEPLEX)</h3>
@@ -3093,7 +3156,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26120</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26120" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Digital Twin for Well-to-Surface Optimization of Cyclic Steam Stimulation (CSS) and Sucker Rod Pump (SRP) Operations for Heavy Oil Wells of Baghewala Field.</h3>
@@ -3117,7 +3180,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26121</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26121" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">eRTMAC-NWIS (Nearby Wells Intelligence System): An AI-Powered Offset Well Knowledge and Decision Support Platform for Drilling Operations</h3>
@@ -3141,7 +3204,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26122</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26122" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Intelligent Data Capture &amp; Schedule-Linking Layer for Infrastructure Project Management: Real-Time Actual Progress Tracking (Planning-to-Execution Bridge)</h3>
@@ -3165,7 +3228,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26123</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26123" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Edge-AI Based Distributed Fleet Coordination for Autonomous Mobile Robots (AMRs) in Smart Warehouses</h3>
@@ -3189,7 +3252,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26124</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26124" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Mobile Urban Intelligence Platform Using Public Transport Fleet</h3>
@@ -3213,7 +3276,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26125</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26125" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Blockchain-Based Secure Platform for Identity,Access Control, and Digital Asset Management</h3>
@@ -3237,7 +3300,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26126</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26126" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Vision Based Autonomous Navigation for Unmanned Ground Vehicle for Outdoor environment</h3>
@@ -3261,7 +3324,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26127</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26127" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">City-Wide AI Engine for Multi-Camera ANPR Trajectory Tracking and Urban Traffic Analytics</h3>
@@ -3285,7 +3348,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26128</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26128" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Efficient systems for early detection,prevention,and management of livestock diseases and animal health issues</h3>
@@ -3309,7 +3372,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26129</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26129" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">System integration and interoperability among government digital platforms,resulting in fragmented service delivery</h3>
@@ -3333,7 +3396,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26130</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26130" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Efficiency in streamlining industrial approvals,compliance processes,and access to government support services</h3>
@@ -3357,7 +3420,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26131</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26131" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Early detection and management of crop diseases and pest infestations</h3>
@@ -3381,7 +3444,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26132</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26132" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Strengthening market linkages and price discovery for farmers</h3>
@@ -3405,7 +3468,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26133</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26133" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Accessibility and quality of public healthcare services,particularly in rural and underserved areas</h3>
@@ -3429,7 +3492,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26134</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26134" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Challenges in aligning skill development programs with industry requirements and emerging job market demands</h3>
@@ -3453,7 +3516,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26135</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26135" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Difficulties in tracking employment outcomes,skill gaps, and the impact of skilling initiatives</h3>
@@ -3477,7 +3540,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26136</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26136" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Startup friendly public procurement mechanism that enables government departments to identify,pilot, procure,and scale innovative solutions from eligible startups</h3>
@@ -3501,7 +3564,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26137</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26137" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Quantum-Inspired Intelligent Traffic Route Optimization in Transportation Systems Using Metaheuristic Optimization</h3>
@@ -3525,7 +3588,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26138</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26138" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Quantum-Inspired Fuel Consumption Prediction and Green Fleet Optimization</h3>
@@ -3549,7 +3612,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26139</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26139" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Hybrid Quantum Machine Learning Platform for Early Disease Detection</h3>
@@ -3573,7 +3636,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26140</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26140" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Interactive Quantum Algorithm Learning Platform</h3>
@@ -3597,7 +3660,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26141</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26141" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Quantum-Inspired Cyber Threat Detection for Digital Signature Security</h3>
@@ -3621,7 +3684,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26142</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26142" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Deep Learning Based Super Resolution Mapping (SRM) from Medium Resolution Satellite Imageries</h3>
@@ -3645,7 +3708,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26143</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26143" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Leveraging satellite imagery to determine Oil spills at sea along with AIS data correlations to identify vessel responsible for the spill.</h3>
@@ -3669,7 +3732,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26144</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26144" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design &amp; Development of a High-Sensitivity Micro barometer Infrasound sensor</h3>
@@ -3693,7 +3756,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26145</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26145" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Detection of Cyber Threats in Unidirectional IP Traffic</h3>
@@ -3717,7 +3780,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26146</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26146" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Monitoring &amp; Analysis of Bitcoin Transaction Traffic</h3>
@@ -3741,7 +3804,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26147</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26147" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Automated model for analysis of .IQ and .wav files along with signal parameter extraction</h3>
@@ -3765,7 +3828,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26148</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26148" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Creation of scripts/functions with new programming language to commence Computer &amp; Network forensic analysis without triggering security solutions</h3>
@@ -3789,7 +3852,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26149</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26149" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Design and Development of an Integrated Secure Data Erasure and Advanced File Recovery Tool for Digital Forensics and Data Sanitization</h3>
@@ -3813,7 +3876,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26150</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26150" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Multi-Vendor DVR/NVR Forensic Analysis Tool for Standardized Acquisition, Recovery, and Analysis of Surveillance Evidence.</h3>
@@ -3837,7 +3900,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26151</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26151" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Dark web threat actor de-anonymization</h3>
@@ -3861,7 +3924,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26152</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26152" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Social Media Analytics</h3>
@@ -3885,7 +3948,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26153</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26153" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI based Network Attack Forecasting from Network Traffic Data</h3>
@@ -3909,7 +3972,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26154</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26154" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Gen AI Platform for Automated Content Transformation</h3>
@@ -3933,7 +3996,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26155</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26155" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Multi-Vendor Network Security Compliance Auditor</h3>
@@ -3957,7 +4020,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26156</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26156" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Universal Log Pre-processing Framework</h3>
@@ -3981,7 +4044,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26157</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26157" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Supervisory Analytics Tool for SOC Assessment (SAT-SA)</h3>
@@ -4005,7 +4068,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26158</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26158" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Single-Pass Drone Video to Accurate 3D Model Generation System</h3>
@@ -4029,7 +4092,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26159</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26159" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">SecureMailScope: AI-Assisted Cryptographic Security Posture Assessment for Secure Email Communications</h3>
@@ -4053,7 +4116,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26160</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26160" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered IPsec VPN Protocol Analyzer and Security Assessment Framework</h3>
@@ -4077,7 +4140,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26161</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26161" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Dam Break Inundation Modelling Using Hydrodynamic Modelling of any River</h3>
@@ -4101,7 +4164,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26162</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26162" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Detection and Classification of Industrial Fires and Persistent Thermal Sources Using NASA FIRMS, OSM &amp; Satellite Data</h3>
@@ -4125,7 +4188,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26163</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26163" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Security Assessment of the World Monitor application</h3>
@@ -4149,7 +4212,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26164</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26164" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Enterprise Cryptographic Discovery &amp; Analysis Tool (ECDAT)</h3>
@@ -4173,7 +4236,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26165</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26165" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI/NLP Engine to Detect Serious Injury &amp; Fatality (SIF) Precursors in OIL&#x27;s Unsafe-Act/Unsafe-Condition and Near-Miss Reports</h3>
@@ -4197,7 +4260,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26166</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26166" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Multi-modal, Sun angle and scale invariant image correspondence using Chandrayaan-2 optical images (OHRC, TMC and IIRS)</h3>
@@ -4221,7 +4284,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26167</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26167" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">SatQuery AI - An Interactive Vision-Language Assistant for Multimodal Remote Sensing Image Analysis through Text Queries</h3>
@@ -4245,7 +4308,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26168</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26168" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-ML based Intelligent Dead Reckoning system for seamless navigation</h3>
@@ -4269,7 +4332,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26169</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26169" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of an AI-Based Virtual Camera Tracking System for Coarse Alignment of Mobile Free Space Optical Communication (FSOC) Terminals</h3>
@@ -4293,7 +4356,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26170</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26170" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Driven Anomaly Detection in Component Burn-In &amp; Screening</h3>
@@ -4317,7 +4380,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26171</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26171" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">On-device Visual Perception for Light-weight Browser Agents</h3>
@@ -4341,7 +4404,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26172</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26172" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Low Latency and Efficient Voice Activator for Edge Devices</h3>
@@ -4365,7 +4428,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26173</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26173" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">iTantra -Indian Multilingual TTS &amp; STT Aided Neural Transceiver Radio Access for low bitrate links</h3>
@@ -4389,7 +4452,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26174</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26174" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI Human Activity Recognition for On-board BAS Experiments</h3>
@@ -4413,7 +4476,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26175</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26175" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">DepthWizard - Single-View Height Estimation and 3D Flythrough</h3>
@@ -4437,7 +4500,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26176</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26176" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">ORCA Marine EcOsystem Reasoning with Collaborative Agents</h3>
@@ -4461,7 +4524,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26177</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26177" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">A deployable AI-powered autonomous drone that aids search-and-rescue operations by detecting people and hazards, thereby improving responder safety and reducing victim discovery time.</h3>
@@ -4485,7 +4548,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26178</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26178" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">A resilient, AI-powered environmental monitoring network that provides early detection, localized intelligence, and actionable alerts for floods, forest fires, pollution events, and other environmental hazards common in India, enabling authorities and communities to shift from reactive disaster response to proactive risk prevention.</h3>
@@ -4509,7 +4572,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26179</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26179" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">To build an AI-powered retail intelligence platform that delivers real-time shopper analytics, automated inventory visibility, and proactive queue management through on-device AI,enabling retailers to reduce stock-outs, improve customer experience, optimize staffing, and increase operational efficiency while maintaining privacy and minimizing cloud dependency.</h3>
@@ -4533,7 +4596,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26180</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26180" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">A field-deployable AI-powered Smart Farming Assistant that helps farmers detect crop diseases, pests, nutrient deficiencies, and irrigation needs at an early stage, while improving resilience against droughts, floods, heat waves, and other agricultural risks common in India. The solution should enable higher yields, lower input costs, more efficient water usage, and faster response to emerging threats through real-time on-device intelligence.</h3>
@@ -4557,7 +4620,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26181</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26181" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">A secure, AI-powered Personal Health Companion that delivers real-time, privacy-preserving health monitoring and early warning capabilities, helping individuals recognize health risks before they become emergencies. The solution should improve resilience during heat waves, floods, pollution events, and other disasters common in India while enabling continuous health support through on-device intelligence.</h3>
@@ -4581,7 +4644,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26182</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26182" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Automated Attribution of Unknown Cryptocurrency Wallets to Nearest Virtual Asset Service Providers (VASPs) through Blockchain Intelligence APIs</h3>
@@ -4605,7 +4668,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26183</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26183" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Real-Time Identification of Fraud-Linked Cryptocurrency Exchanges from Victim-Reported Suspect Wallet Addresses through Automated Blockchain Analytics</h3>
@@ -4629,7 +4692,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26184</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26184" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Development of a Predictive Analytics Framework for Cybercrime Complaints to Forecast Likely Cash Withdrawal Locations in Advance, Enabling Generation of Actionable Intelligence for Timely and Proactive Cybercrime Intervention.</h3>
@@ -4653,7 +4716,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26185</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26185" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Helmet mounted conformal antenna for tactical communications in urban CQB environments.</h3>
@@ -4677,7 +4740,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26186</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26186" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Predictive Personnel Stress and Welfare Monitoring System for Uniformed Forces</h3>
@@ -4701,7 +4764,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26187</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26187" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Based Intelligent Video Analytics Platform for Border Surveillance using existing CCTV Infrastructure.</h3>
@@ -4725,7 +4788,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26188</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26188" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Al-Based Fake Identity &amp; Document Screening System</h3>
@@ -4749,7 +4812,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26189</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26189" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">AI-Powered Criminal Network Analysis System</h3>
@@ -4773,7 +4836,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26190</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26190" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Secure Digital Document Management System for Legal and Investigation Documents</h3>
@@ -4797,7 +4860,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26191</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26191" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Intelligent Identification of Hazard-Based Red Zones, Carrying Capacity Assessment, and Immediate Relocation Needs for Vulnerable Habitations</h3>
@@ -4821,7 +4884,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26192</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-advanced">Advanced</span>
+    <span class="badge comp-advanced">Advanced</span>
     <button class="star-btn" type="button" data-ps="SIH26192" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Flash Flood Prediction System for Hilly Regions using Multi-Source Data Theme</h3>
@@ -4845,7 +4908,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26193</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26193" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4869,7 +4932,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26194</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26194" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4893,7 +4956,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26195</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26195" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4917,7 +4980,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26196</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26196" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4941,7 +5004,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26197</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26197" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4965,7 +5028,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26198</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26198" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -4989,7 +5052,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26199</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26199" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5013,7 +5076,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26200</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26200" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5037,7 +5100,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26201</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26201" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5061,7 +5124,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26202</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26202" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5085,7 +5148,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26203</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26203" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5109,7 +5172,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26204</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26204" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5133,7 +5196,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26205</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26205" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5157,7 +5220,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26206</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26206" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5181,7 +5244,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26207</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26207" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5205,7 +5268,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26208</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26208" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5229,7 +5292,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26209</span>
     <span class="badge cat-software">Software</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26209" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5253,7 +5316,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26210</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26210" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5277,7 +5340,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26211</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26211" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5301,7 +5364,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26212</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26212" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5325,7 +5388,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26213</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26213" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5349,7 +5412,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26214</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26214" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5373,7 +5436,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26215</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26215" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5397,7 +5460,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26216</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26216" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5421,7 +5484,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26217</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26217" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5445,7 +5508,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26218</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26218" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5469,7 +5532,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26219</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26219" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5493,7 +5556,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26220</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26220" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5517,7 +5580,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26221</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-moderate">Moderate</span>
+    <span class="badge comp-moderate">Moderate</span>
     <button class="star-btn" type="button" data-ps="SIH26221" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5541,7 +5604,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26222</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26222" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5565,7 +5628,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26223</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26223" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5589,7 +5652,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26224</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26224" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5613,7 +5676,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26225</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26225" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5637,7 +5700,7 @@
   <div class="card-head">
     <span class="ps-number">SIH26226</span>
     <span class="badge cat-hardware">Hardware</span>
-    <span class="badge comp-badge comp-starter">Starter</span>
+    <span class="badge comp-starter">Starter</span>
     <button class="star-btn" type="button" data-ps="SIH26226" title="Shortlist this">☆</button>
   </div>
   <h3 class="title">Student Innovation</h3>
@@ -5684,7 +5747,7 @@
       btn.textContent = on ? '★' : '☆';
       btn.closest('.card').classList.toggle('starred', on);
     });
-    document.getElementById('shortlistCount').innerHTML = '<b>' + list.length + '</b> shortlisted';
+    document.getElementById('shortlistCount').textContent = list.length;
   }
   function showToast(msg) {
     const t = document.getElementById('toast');
