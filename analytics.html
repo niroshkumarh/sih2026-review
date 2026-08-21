@@ -103,6 +103,14 @@ h2 { font-size: 1.12rem; margin: 0 0 4px; }
 .comp-bar-fill { height: 100%; border-radius: 8px; }
 .comp-num { width: 34px; text-align: right; font-weight: 700; }
 
+.dept-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 0.87rem; text-decoration: none; color: inherit; cursor: pointer; }
+.dept-row:last-child { margin-bottom: 0; }
+.dept-label { width: 150px; color: var(--text); font-weight: 600; flex-shrink: 0; }
+.dept-bar-track { flex: 1; background: var(--panel2); border-radius: 8px; height: 18px; overflow: hidden; }
+.dept-bar-fill { height: 100%; border-radius: 8px; background: var(--indigo); transition: filter 0.15s; }
+.dept-row:hover .dept-bar-fill { filter: brightness(1.15); }
+.dept-num { width: 74px; text-align: right; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+
 .cat-split { display: flex; height: 16px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
 .cat-sw { background: var(--sw); }
 .cat-hw { background: var(--hw); }
@@ -175,6 +183,23 @@ footer { text-align: center; color: var(--muted2); font-size: 0.78rem; padding: 
     <div class="comp-row"><div class="comp-label">Starter</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:22.1%; background:var(--emerald)"></div></div><div class="comp-num">50</div></div>
     <div class="comp-row"><div class="comp-label">Moderate</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:28.3%; background:var(--amber)"></div></div><div class="comp-num">64</div></div>
     <div class="comp-row"><div class="comp-label">Advanced</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:49.6%; background:var(--rose)"></div></div><div class="comp-num">112</div></div>
+  </section>
+
+  <section>
+    <h2>Department-wise breakdown</h2>
+    <div class="section-sub">Which KCT academic departments have the skills each PS needs — an AI-estimated crosswalk from tech-domain bucket to department, not official curriculum mapping. Most statements need 2+ departments, so percentages add up to well over 100%. Tap a bar to browse those statements.</div>
+    <a class="dept-row" href="decide.html?dept=CSE"><div class="dept-label">CSE</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:93.4%"></div></div><div class="dept-num">211 (93%)</div></a>
+    <a class="dept-row" href="decide.html?dept=IT"><div class="dept-label">IT</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:70.8%"></div></div><div class="dept-num">160 (71%)</div></a>
+    <a class="dept-row" href="decide.html?dept=Civil"><div class="dept-label">Civil</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:60.6%"></div></div><div class="dept-num">137 (61%)</div></a>
+    <a class="dept-row" href="decide.html?dept=ECE"><div class="dept-label">ECE</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:57.1%"></div></div><div class="dept-num">129 (57%)</div></a>
+    <a class="dept-row" href="decide.html?dept=AI+%26+Data+Science"><div class="dept-label">AI &amp; Data Science</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:53.5%"></div></div><div class="dept-num">121 (54%)</div></a>
+    <a class="dept-row" href="decide.html?dept=CSE+(AI+%26+ML)"><div class="dept-label">CSE (AI &amp; ML)</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:53.5%"></div></div><div class="dept-num">121 (54%)</div></a>
+    <a class="dept-row" href="decide.html?dept=Mechanical"><div class="dept-label">Mechanical</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:34.1%"></div></div><div class="dept-num">77 (34%)</div></a>
+    <a class="dept-row" href="decide.html?dept=EEE"><div class="dept-label">EEE</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:22.6%"></div></div><div class="dept-num">51 (23%)</div></a>
+    <a class="dept-row" href="decide.html?dept=CSE+(Cyber+Security)"><div class="dept-label">CSE (Cyber Security)</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:21.2%"></div></div><div class="dept-num">48 (21%)</div></a>
+    <a class="dept-row" href="decide.html?dept=Mechatronics"><div class="dept-label">Mechatronics</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:17.3%"></div></div><div class="dept-num">39 (17%)</div></a>
+    <a class="dept-row" href="decide.html?dept=Biomedical"><div class="dept-label">Biomedical</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:15.9%"></div></div><div class="dept-num">36 (16%)</div></a>
+    <a class="dept-row" href="decide.html?dept=Biotechnology"><div class="dept-label">Biotechnology</div><div class="dept-bar-track"><div class="dept-bar-fill" style="width:14.2%"></div></div><div class="dept-num">32 (14%)</div></a>
   </section>
 
   <section class="plan-box">
