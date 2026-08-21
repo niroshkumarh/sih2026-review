@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIH 2026 — Planning Analytics</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel2: #1e222b; --border: #2b303c;
+    --text: #e8eaf0; --muted: #9aa3b2; --accent: #4f8cff; --accent2: #35c98f; --hw: #ff9f43;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+  }
+  header {
+    position: sticky; top: 0; z-index: 10; background: rgba(15,17,21,0.97);
+    backdrop-filter: blur(6px); border-bottom: 1px solid var(--border);
+    padding: 14px 20px 12px;
+  }
+  .brand { font-size: 0.72rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 2px; }
+  header h1 { margin: 0 0 8px; font-size: 1.35rem; }
+  .nav { display: flex; gap: 8px; }
+  .nav a {
+    text-decoration: none; background: var(--panel2); color: var(--muted); border: 1px solid var(--border);
+    border-radius: 999px; padding: 7px 14px; font-size: 0.83rem; font-weight: 600;
+  }
+  .nav a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  main { max-width: 1000px; margin: 0 auto; padding: 20px; }
+  section { margin-bottom: 28px; }
+  h2 { font-size: 1.05rem; margin: 0 0 4px; }
+  .section-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 14px; }
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; flex: 1; min-width: 120px; }
+  .stat-card .num { font-size: 1.5rem; font-weight: 700; }
+  .stat-card .label { font-size: 0.78rem; color: var(--muted); }
+
+  #treemap { position: relative; width: 100%; height: 420px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .tm-cell {
+    position: absolute; box-sizing: border-box; border: 2px solid var(--bg); padding: 8px 10px;
+    overflow: hidden; cursor: pointer; transition: filter 0.15s; display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .tm-cell:hover { filter: brightness(1.15); }
+  .tm-name { font-weight: 700; font-size: 0.82rem; color: rgba(0,0,0,0.82); text-shadow: 0 1px 1px rgba(255,255,255,0.15); }
+  .tm-count { font-size: 1.1rem; font-weight: 800; color: rgba(0,0,0,0.82); }
+  .tm-tooltip {
+    position: fixed; background: #05060a; border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 0.8rem; color: var(--text); pointer-events: none; z-index: 100;
+    max-width: 240px; display: none; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  }
+  .tm-tooltip b { color: var(--accent2); }
+
+  .comp-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.85rem; }
+  .comp-label { width: 90px; color: var(--muted); }
+  .comp-bar-track { flex: 1; background: var(--panel2); border-radius: 6px; height: 18px; overflow: hidden; }
+  .comp-bar-fill { height: 100%; border-radius: 6px; }
+  .comp-num { width: 32px; text-align: right; font-weight: 700; }
+
+  .cat-split { display: flex; height: 14px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+  .cat-sw { background: var(--accent); }
+  .cat-hw { background: var(--hw); }
+  .cat-legend { display: flex; gap: 16px; font-size: 0.82rem; color: var(--muted); }
+  .cat-legend span::before { content: "●"; margin-right: 5px; }
+  .cat-legend .lsw::before { color: var(--accent); }
+  .cat-legend .lhw::before { color: var(--hw); }
+
+  .plan-box {
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--accent2);
+    border-radius: 10px; padding: 16px 18px; font-size: 0.92rem; color: #d5dae4;
+  }
+  .plan-box h3 { margin: 0 0 6px; font-size: 0.95rem; color: var(--accent2); }
+  .plan-box p { margin: 0 0 12px; }
+  .plan-box p:last-child { margin-bottom: 0; }
+  .team-tag { display: inline-block; background: rgba(79,140,255,0.15); color: var(--accent); border-radius: 6px; padding: 1px 7px; font-size: 0.82rem; font-weight: 600; }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.78rem; padding: 24px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">KCT &middot; Smart India Hackathon 2026</div>
+  <h1>Planning Analytics</h1>
+  <div class="nav">
+    <a href="decide.html">Browse Problem Statements</a>
+    <a href="analytics.html" class="active">Planning Analytics</a>
+  </div>
+</header>
+<main>
+  <section>
+    <div class="stats-row">
+      <div class="stat-card"><div class="num">226</div><div class="label">Total problem statements</div></div>
+      <div class="stat-card"><div class="num">16</div><div class="label">Tech-domain buckets</div></div>
+      <div class="stat-card"><div class="num">179</div><div class="label">Span 2+ domains (79%)</div></div>
+      <div class="stat-card"><div class="num">54</div><div class="label">Hardware-track (24%)</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Problem statement buckets</h2>
+    <div class="section-sub">Grouped by the actual skills each PS needs (not SIH's own 18 official themes) — box size = how many problem statements fall in that bucket. Tap a box to browse it.</div>
+    <div id="treemap"></div>
+    <div class="tm-tooltip" id="tmTooltip"></div>
+  </section>
+
+  <section>
+    <h2>Category split</h2>
+    <div class="section-sub">Software vs Hardware track</div>
+    <div class="cat-split">
+      <div class="cat-sw" style="width:76.1%"></div>
+      <div class="cat-hw" style="width:23.9%"></div>
+    </div>
+    <div class="cat-legend">
+      <span class="lsw">Software — 172 (76%)</span>
+      <span class="lhw">Hardware — 54 (24%)</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Complexity distribution</h2>
+    <div class="section-sub">Estimated from scope, integrations required, and depth of tech needed — a rough guide to how big a team/how much runway a PS needs, not an official rating.</div>
+    <div class="comp-row"><div class="comp-label">Starter</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:22.1%; background:#35c98f"></div></div><div class="comp-num">50</div></div><div class="comp-row"><div class="comp-label">Moderate</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:28.3%; background:#ffd25a"></div></div><div class="comp-num">64</div></div><div class="comp-row"><div class="comp-label">Advanced</div><div class="comp-bar-track"><div class="comp-bar-fill" style="width:49.6%; background:#ff5c7a"></div></div><div class="comp-num">112</div></div>
+  </section>
+
+  <section>
+    <h2>How to plan for it</h2>
+    <div class="plan-box">
+      <h3>Where the volume is</h3>
+      <p><span class="team-tag">AI / ML & Computer Vision</span> touches 121 of 226 statements (54%) — it's the single highest-leverage skill to build across your team, even for statements not officially tagged "AI" by SIH. <span class="team-tag">Mobile/Web + Cloud/Data</span> show up almost everywhere as delivery/backend layers — treat those as baseline team capability, not a differentiator.</p>
+      <h3>Where you can stand out</h3>
+      <p>KCT already has real hardware/embedded experience (propulsion + embedded control work on other campus teams). <span class="team-tag">IoT & Embedded Hardware</span> (51) and <span class="team-tag">Robotics, Drones & Automation</span> (39) are smaller buckets nationally because most student teams default to pure software — fewer competing teams will have working hardware, so a working prototype here stands out more per unit of effort than another AI dashboard.</p>
+      <h3>Suggested team split</h3>
+      <p><b>Team A — Hardware-capable:</b> target IoT/Embedded or Robotics buckets, lower competition, plays to existing campus strength.<br>
+      <b>Team B — AI/software-heavy:</b> target AI/ML crossed with Disaster & Environment or Healthcare & MedTech — the largest buckets, strong judge appeal, and mature public datasets (weather/satellite APIs, health records) make them buildable in hackathon time.<br>
+      <b>Team C — First-time SIH teams:</b> pick from the 50 "Starter" complexity statements to build hackathon experience without getting buried in scope — concentrated in General Software/Process Tooling, Healthcare, and Space buckets.</p>
+      <h3>Reality check</h3>
+      <p>179 of 226 statements (79%) span multiple domains — most PS need a cross-functional team (e.g. ML + GIS, or hardware + cloud), not a single-skill group. Pick statements that match a team's *combined* skill set, not one person's specialty.</p>
+    </div>
+  </section>
+</main>
+<footer>Buckets and complexity are AI-assisted estimates from the actual problem statement text, for planning only — always read the full PS on the browse page before committing.</footer>
+<script>
+  const items = [{"name": "AI / ML & Computer Vision", "count": 121, "color": "#4f8cff", "sw": 103, "hw": 18, "starter": 10, "moderate": 30, "advanced": 81}, {"name": "Disaster & Environment", "count": 101, "color": "#ff5c7a", "sw": 78, "hw": 23, "starter": 7, "moderate": 24, "advanced": 70}, {"name": "Mobile / Web App & Dashboard", "count": 94, "color": "#35c98f", "sw": 83, "hw": 11, "starter": 4, "moderate": 19, "advanced": 71}, {"name": "GIS, Satellite & Remote Sensing", "count": 83, "color": "#a15cff", "sw": 73, "hw": 10, "starter": 5, "moderate": 20, "advanced": 58}, {"name": "Transportation & Logistics", "count": 55, "color": "#ffb347", "sw": 43, "hw": 12, "starter": 2, "moderate": 13, "advanced": 40}, {"name": "IoT & Embedded Hardware", "count": 51, "color": "#ff9f43", "sw": 26, "hw": 25, "starter": 2, "moderate": 7, "advanced": 42}, {"name": "Cybersecurity & Blockchain", "count": 48, "color": "#2fd4d9", "sw": 43, "hw": 5, "starter": 0, "moderate": 12, "advanced": 36}, {"name": "Cloud, Data & Big Data", "count": 42, "color": "#7c8cff", "sw": 37, "hw": 5, "starter": 0, "moderate": 7, "advanced": 35}, {"name": "Robotics, Drones & Automation", "count": 39, "color": "#e2734f", "sw": 25, "hw": 14, "starter": 1, "moderate": 6, "advanced": 32}, {"name": "Healthcare & MedTech", "count": 36, "color": "#ff6fa5", "sw": 24, "hw": 12, "starter": 6, "moderate": 8, "advanced": 22}, {"name": "Agriculture & FoodTech", "count": 32, "color": "#8bc34a", "sw": 22, "hw": 10, "starter": 2, "moderate": 7, "advanced": 23}, {"name": "Space Technology", "count": 28, "color": "#6c63ff", "sw": 22, "hw": 6, "starter": 3, "moderate": 8, "advanced": 17}, {"name": "AR / VR & Simulation", "count": 25, "color": "#c77dff", "sw": 18, "hw": 7, "starter": 0, "moderate": 5, "advanced": 20}, {"name": "FinTech & Governance", "count": 23, "color": "#4dd0e1", "sw": 22, "hw": 1, "starter": 0, "moderate": 6, "advanced": 17}, {"name": "General Software / Process Tooling", "count": 21, "color": "#9aa3b2", "sw": 11, "hw": 10, "starter": 17, "moderate": 4, "advanced": 0}, {"name": "Education & Skilling", "count": 14, "color": "#ffd25a", "sw": 12, "hw": 2, "starter": 4, "moderate": 3, "advanced": 7}];
+  const container = document.getElementById('treemap');
+  const tooltip = document.getElementById('tmTooltip');
+
+  function layoutTreemap(items, x, y, w, h) {
+    if (items.length === 0) return [];
+    if (items.length === 1) {
+      return [{...items[0], x, y, w, h}];
+    }
+    const total = items.reduce((s, i) => s + i.count, 0);
+    let i = 0, accum = 0;
+    // split point: smallest prefix whose sum >= half total
+    while (i < items.length - 1 && accum + items[i].count < total / 2) {
+      accum += items[i].count;
+      i++;
+    }
+    accum += items[i].count;
+    const first = items.slice(0, i + 1);
+    const rest = items.slice(i + 1);
+    const ratio = accum / total;
+    let result = [];
+    if (w >= h) {
+      const w1 = w * ratio;
+      result = result.concat(layoutTreemap(first, x, y, w1, h));
+      result = result.concat(layoutTreemap(rest, x + w1, y, w - w1, h));
+    } else {
+      const h1 = h * ratio;
+      result = result.concat(layoutTreemap(first, x, y, w, h1));
+      result = result.concat(layoutTreemap(rest, x, y + h1, w, h - h1));
+    }
+    return result;
+  }
+
+  function render() {
+    const w = container.clientWidth, h = container.clientHeight;
+    const laid = layoutTreemap(items, 0, 0, w, h);
+    container.innerHTML = '';
+    laid.forEach(cell => {
+      const div = document.createElement('div');
+      div.className = 'tm-cell';
+      div.style.left = cell.x + 'px';
+      div.style.top = cell.y + 'px';
+      div.style.width = cell.w + 'px';
+      div.style.height = cell.h + 'px';
+      div.style.background = cell.color;
+      if (cell.w > 70 && cell.h > 34) {
+        div.innerHTML = '<div class="tm-count">' + cell.count + '</div><div class="tm-name">' + cell.name + '</div>';
+      } else if (cell.w > 30 && cell.h > 20) {
+        div.innerHTML = '<div class="tm-count">' + cell.count + '</div>';
+      }
+      div.addEventListener('mousemove', (e) => {
+        tooltip.style.display = 'block';
+        tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 250) + 'px';
+        tooltip.style.top = (e.clientY + 14) + 'px';
+        tooltip.innerHTML = '<b>' + cell.name + '</b><br>' + cell.count + ' problem statements<br>' +
+          'Software ' + cell.sw + ' &middot; Hardware ' + cell.hw + '<br>' +
+          'Starter ' + cell.starter + ' &middot; Moderate ' + cell.moderate + ' &middot; Advanced ' + cell.advanced;
+      });
+      div.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+      div.addEventListener('click', () => {
+        window.location.href = 'decide.html?bucket=' + encodeURIComponent(cell.name);
+      });
+      container.appendChild(div);
+    });
+  }
+
+  render();
+  window.addEventListener('resize', render);
+</script>
+</body>
+</html>
